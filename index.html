@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест: Негізгі тригонометриялық тепе-теңдіктер — 8Ә</title>
+<style>
+  :root{
+    --ink:#1d2433; --muted:#5b6475; --line:#d7dbe3; --bg:#f6f7f9;
+    --accent:#1f3a68; --accent-soft:#e8edf5; --ok:#1e6b3a; --bad:#9b2226; --warn:#8a5a00;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Times New Roman", Georgia, "PT Serif", serif;
+    font-size:18px; line-height:1.5;
+    -webkit-user-select:none; user-select:none;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:28px 16px 40px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:28px 30px}
+  h1{font-size:24px;margin:0 0 4px;font-weight:700;color:var(--accent)}
+  h2{font-size:20px;margin:0 0 14px;font-weight:700}
+  .sub{color:var(--muted);font-size:16px;margin:0}
+  hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+  .meta{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:17px;margin:0}
+  .meta dt{color:var(--muted)} .meta dd{margin:0}
+  label.f{display:block;font-size:16px;color:var(--muted);margin:16px 0 6px}
+  input[type=text],select{
+    width:100%;padding:10px 12px;font:inherit;font-size:18px;color:var(--ink);
+    border:1px solid #b9c0cc;border-radius:4px;background:#fff;
+    -webkit-user-select:text;user-select:text;
+  }
+  input:focus,select:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+  .seg{display:flex;gap:10px}
+  .seg label{flex:1;border:1px solid #b9c0cc;border-radius:4px;padding:10px;text-align:center;cursor:pointer}
+  .seg input{display:none}
+  .seg input:checked + span{font-weight:700;color:var(--accent)}
+  .seg label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+  .rules{font-size:15.5px;color:var(--muted);background:#fafbfc;border:1px solid var(--line);border-radius:4px;padding:12px 16px;margin-top:20px}
+  .rules ul{margin:6px 0 0;padding-left:20px}
+  .btn{
+    display:inline-block;font:inherit;font-size:17px;padding:10px 26px;border-radius:4px;cursor:pointer;
+    border:1px solid var(--accent);background:var(--accent);color:#fff;
+  }
+  .btn:disabled{background:#c9ced8;border-color:#c9ced8;cursor:not-allowed}
+  .btn.ghost{background:#fff;color:var(--accent)}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
+  .hidden{display:none!important}
+
+  /* test */
+  .top{display:flex;justify-content:space-between;align-items:center;font-size:16px;color:var(--muted);margin-bottom:10px}
+  .timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);border:1px solid var(--line);border-radius:4px;padding:2px 10px;background:#fff}
+  .timer.low{color:var(--bad);border-color:#e3b7b9}
+  .progress{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:18px}
+  .progress div{height:100%;background:var(--accent);width:0}
+  .qnum{font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+  .qtext{font-size:19px;margin:0 0 18px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:4px;padding:10px 14px;cursor:pointer;background:#fff}
+  .opt:hover{border-color:#9aa6bb}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .opt .let{width:26px;height:26px;border:1px solid #9aa6bb;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+  .opt.sel .let{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .num-in{max-width:220px}
+  .hint{font-size:15px;color:var(--muted);margin-top:8px}
+  .fig{display:flex;justify-content:center;margin:4px 0 16px}
+
+  /* math */
+  .m{font-style:italic;white-space:nowrap}
+  .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;font-size:.92em;line-height:1.15}
+  .fr>span:first-child{border-bottom:1px solid currentColor;padding:0 3px}
+  .fr>span:last-child{padding:0 3px}
+
+  /* modal */
+  .ov{position:fixed;inset:0;background:rgba(20,26,38,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+  .modal{background:#fff;border-radius:6px;max-width:460px;width:100%;padding:24px 26px;border-top:4px solid var(--warn)}
+  .modal h3{margin:0 0 10px;font-size:20px;color:var(--warn)}
+  .modal p{margin:0 0 10px;font-size:17px}
+
+  /* result */
+  .score{font-size:44px;font-weight:700;color:var(--accent);margin:6px 0}
+  table.res{width:100%;border-collapse:collapse;font-size:17px;margin-top:10px}
+  table.res td{border-bottom:1px solid var(--line);padding:7px 4px}
+  table.res td:last-child{text-align:right;font-weight:700}
+  .status{font-size:15.5px;margin-top:16px;color:var(--muted)}
+  .status.ok{color:var(--ok)} .status.err{color:var(--bad)}
+  @media (max-width:560px){.card{padding:20px 18px}.meta{grid-template-columns:1fr}.meta dt{margin-top:6px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== СТАРТ ===== -->
+  <section id="start" class="card">
+    <p class="sub">Тест тақырыбы</p>
+    <h1>Негізгі тригонометриялық тепе-теңдіктер</h1>
+    <hr>
+    <dl class="meta">
+      <dt>Пән</dt><dd>Алгебра</dd>
+      <dt>Оқу мақсаты</dt><dd>8.1.3.22 негізгі тригонометриялық тепе-теңдіктерді қорытып шығару және қолдану</dd>
+      <dt>Мұғалім</dt><dd>математика пәнінің мұғалімі – Кунгозин Даулет Багдашұлы</dd>
+    </dl>
+    <hr>
+    <label class="f" for="fio">Аты-жөніңіз (тегі, аты)</label>
+    <input type="text" id="fio" autocomplete="off" placeholder="Введите ФИ">
+
+    <label class="f" for="cls">Сынып</label>
+    <select id="cls">
+      <option value="">— таңдаңыз —</option>
+      <option value="8Ә">8Ә</option>
+    </select>
+
+    <label class="f">Нұсқа</label>
+    <div class="seg">
+      <label><input type="radio" name="var" value="1"><span>1-нұсқа</span></label>
+      <label><input type="radio" name="var" value="2"><span>2-нұсқа</span></label>
+    </div>
+
+    <div class="rules">
+      <b>Ережелер</b>
+      <ul>
+        <li>10 тапсырма, әр тапсырма — 1 балл, барлығы 10 балл.</li>
+        <li>8 тапсырмада бір дұрыс жауапты таңдаңыз, 2 тапсырмада санды енгізіңіз.</li>
+        <li>Әр сұраққа 2 мин 30 с беріледі. Уақыт біткенде келесі сұраққа автоматты түрде өтеді.</li>
+        <li>Алдыңғы сұраққа қайта оралуға болмайды.</li>
+        <li>Тест кезінде қойындыны (вкладканы) жасыруға немесе басқа терезеге ауысуға болмайды — әр жағдай үшін баға 1 балға төмендетіледі.</li>
+      </ul>
+    </div>
+
+    <div class="row">
+      <span></span>
+      <button class="btn" id="go" disabled>Әрі қарай</button>
+    </div>
+  </section>
+
+  <!-- ===== ТЕСТ ===== -->
+  <section id="test" class="hidden">
+    <div class="top">
+      <span id="who"></span>
+      <span class="timer" id="timer">2:30</span>
+    </div>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="card">
+      <div class="qnum" id="qnum"></div>
+      <div class="qtext" id="qtext"></div>
+      <div id="qfig" class="fig hidden"></div>
+      <div id="qbody"></div>
+      <div class="row">
+        <span class="hint" id="qhint"></span>
+        <button class="btn" id="next">Келесі</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== НӘТИЖЕ ===== -->
+  <section id="result" class="card hidden">
+    <p class="sub">Тест аяқталды</p>
+    <h1>Негізгі тригонометриялық тепе-теңдіктер</h1>
+    <hr>
+    <div id="rwho" style="font-size:17px"></div>
+    <div class="score" id="rscore"></div>
+    <table class="res">
+      <tr><td>Дұрыс жауаптар саны</td><td id="rraw"></td></tr>
+      <tr><td>Қойындыны жасыру саны</td><td id="rleave"></td></tr>
+      <tr><td>Айыппұл</td><td id="rpen"></td></tr>
+      <tr><td>Қорытынды балл</td><td id="rfin"></td></tr>
+    </table>
+    <div class="status" id="rstatus">Нәтиже жіберілуде…</div>
+  </section>
+</div>
+
+<!-- ===== ЕСКЕРТУ ===== -->
+<div class="ov hidden" id="warn">
+  <div class="modal">
+    <h3>Ескерту!</h3>
+    <p>Сіз тест кезінде қойындыны жасырдыңыз немесе басқа терезеге ауыстыңыз.</p>
+    <p><b>Қойындыны жасырған жағдайда баға 1 балға төмендетіледі.</b></p>
+    <p>Жасыру саны: <b id="wcount">0</b>. Тест жалғасады.</p>
+    <div class="row" style="margin-top:14px"><span></span><button class="btn" id="wok">Түсіндім, жалғастыру</button></div>
+  </div>
+</div>
+
+<script>
+/* ================== НАСТРОЙКИ ================== */
+// Вставьте сюда URL веб-приложения Apps Script (Развернуть → Новое развертывание → Веб-приложение)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVr4785yEuTGS5t0rouFA2Mba0_wvG4RD6uY4I1woUDIcJQ1B3RliOWlVEjtbGVYQL/exec";
+const TIME_PER_Q = 150;          // 2,5 минуты на вопрос
+const PENALTY_PER_LEAVE = 1;     // −1 балл за каждое сворачивание вкладки
+const TOPIC = "Негізгі тригонометриялық тепе-теңдіктер (8.1.3.22)";
+
+/* ================== ВСПОМОГАТЕЛЬНОЕ ================== */
+const F = (a,b) => `<span class="fr"><span>${a}</span><span>${b}</span></span>`;
+const a = '<span class="m">α</span>';
+const sin = '<span class="m">sin</span>', cos = '<span class="m">cos</span>',
+      tg = '<span class="m">tg</span>', ctg = '<span class="m">ctg</span>';
+
+function triangle(leftLeg, bottomLeg, hyp){
+  // Прямоугольный треугольник ABC, ∠C = 90°. C — внизу слева, A — внизу справа, B — вверху.
+  return `
+  <svg width="340" height="230" viewBox="0 0 340 230" role="img" aria-label="Тікбұрышты үшбұрыш">
+    <polygon points="50,190 300,190 50,40" fill="#f3f6fb" stroke="#1d2433" stroke-width="2"/>
+    <polyline points="50,172 68,172 68,190" fill="none" stroke="#1d2433" stroke-width="1.5"/>
+    <path d="M 268 190 A 32 32 0 0 0 274 172" fill="none" stroke="#1f3a68" stroke-width="1.6"/>
+    <text x="34" y="208" font-family="Times New Roman" font-size="20" font-style="italic">C</text>
+    <text x="304" y="208" font-family="Times New Roman" font-size="20" font-style="italic">A</text>
+    <text x="34" y="36" font-family="Times New Roman" font-size="20" font-style="italic">B</text>
+    <text x="26" y="121" font-family="Times New Roman" font-size="19" text-anchor="middle">${leftLeg}</text>
+    <text x="175" y="214" font-family="Times New Roman" font-size="19" text-anchor="middle">${bottomLeg}</text>
+    <text x="188" y="104" font-family="Times New Roman" font-size="19" text-anchor="middle">${hyp}</text>
+  </svg>`;
+}
+
+/* ================== ВОПРОСЫ ================== */
+/* type: "mc" — один правильный ответ (первый вариант в массиве — правильный, при показе перемешиваются)
+   type: "num" — ввод числа, ans — правильное число */
+const QUESTIONS = {
+  1: [
+    {type:"mc", q:`Негізгі тригонометриялық тепе-теңдікті аяқтаңыз: ${sin}<sup>2</sup>${a} + ${cos}<sup>2</sup>${a} = …`,
+     o:["1","0","2",`${tg}${a}`]},
+    {type:"mc", q:`${sin}${a} = ${F(3,5)} және ${a} — сүйір бұрыш. ${cos}${a} мәнін табыңыз.`,
+     o:[F(4,5),F(3,4),F(2,5),F(5,4)]},
+    {type:"mc", q:`${cos}${a} = ${F(5,13)} және ${a} — сүйір бұрыш. ${tg}${a} мәнін табыңыз.`,
+     o:[F(12,5),F(5,12),F(12,13),F(13,12)]},
+    {type:"mc", q:`${tg}${a} · ${ctg}${a} көбейтіндісі неге тең?`,
+     o:["1","0","−1",`${tg}<sup>2</sup>${a}`]},
+    {type:"mc", q:`Тепе-теңдікті аяқтаңыз: 1 + ${tg}<sup>2</sup>${a} = …`,
+     o:[F(1,`${cos}<sup>2</sup>${a}`),F(1,`${sin}<sup>2</sup>${a}`),`${cos}<sup>2</sup>${a}`,`${ctg}<sup>2</sup>${a}`]},
+    {type:"mc", q:`Өрнекті ықшамдаңыз: (1 − ${sin}<sup>2</sup>${a}) · ${tg}<sup>2</sup>${a}`,
+     o:[`${sin}<sup>2</sup>${a}`,`${cos}<sup>2</sup>${a}`,"1",`${tg}<sup>2</sup>${a}`]},
+    {type:"mc", q:`<span class="m">ABC</span> тікбұрышты үшбұрышында ∠<span class="m">C</span> = 90°, <span class="m">BC</span> = 8, <span class="m">AC</span> = 15, <span class="m">AB</span> = 17. ${tg}<span class="m"> A</span> мәнін табыңыз.`,
+     fig: triangle(8,15,17),
+     o:[F(8,15),F(15,8),F(8,17),F(15,17)]},
+    {type:"mc", q:`Өрнекті ықшамдаңыз: ${sin}<sup>2</sup>${a} + ${cos}<sup>2</sup>${a} + ${tg}<sup>2</sup>${a}`,
+     o:[F(1,`${cos}<sup>2</sup>${a}`),F(1,`${sin}<sup>2</sup>${a}`),`1 + ${ctg}<sup>2</sup>${a}`,"2"]},
+    {type:"num", q:`${cos}${a} = 0,8 және ${a} — сүйір бұрыш. ${sin}${a} мәнін табыңыз.`,
+     ans:0.6, hint:"Жауапты ондық бөлшек түрінде жазыңыз (мысалы: 0,5)."},
+    {type:"num", q:`${tg}${a} = 2 екені белгілі. ${F(1,`${cos}<sup>2</sup>${a}`)} өрнегінің мәнін табыңыз.`,
+     ans:5, hint:"Жауапты сан түрінде жазыңыз."}
+  ],
+  2: [
+    {type:"mc", q:`${tg}${a} неге тең?`,
+     o:[F(`${sin}${a}`,`${cos}${a}`),F(`${cos}${a}`,`${sin}${a}`),`${sin}${a} · ${cos}${a}`,F(1,`${sin}${a}`)]},
+    {type:"mc", q:`${sin}${a} = ${F(5,13)} және ${a} — сүйір бұрыш. ${cos}${a} мәнін табыңыз.`,
+     o:[F(12,13),F(8,13),F(5,12),F(13,12)]},
+    {type:"mc", q:`${sin}${a} = ${F(4,5)} және ${a} — сүйір бұрыш. ${ctg}${a} мәнін табыңыз.`,
+     o:[F(3,4),F(4,3),F(3,5),F(5,4)]},
+    {type:"mc", q:`Тепе-теңдікті аяқтаңыз: 1 + ${ctg}<sup>2</sup>${a} = …`,
+     o:[F(1,`${sin}<sup>2</sup>${a}`),F(1,`${cos}<sup>2</sup>${a}`),`${sin}<sup>2</sup>${a}`,`${tg}<sup>2</sup>${a}`]},
+    {type:"mc", q:`Негізгі тригонометриялық тепе-теңдіктен ${sin}<sup>2</sup>${a} неге тең болады?`,
+     o:[`1 − ${cos}<sup>2</sup>${a}`,`${cos}<sup>2</sup>${a} − 1`,`1 + ${cos}<sup>2</sup>${a}`,`1 − ${cos}${a}`]},
+    {type:"mc", q:`Өрнекті ықшамдаңыз: (1 − ${cos}<sup>2</sup>${a}) · ${ctg}<sup>2</sup>${a}`,
+     o:[`${cos}<sup>2</sup>${a}`,`${sin}<sup>2</sup>${a}`,"1",`${ctg}<sup>2</sup>${a}`]},
+    {type:"mc", q:`<span class="m">ABC</span> тікбұрышты үшбұрышында ∠<span class="m">C</span> = 90°, <span class="m">BC</span> = 7, <span class="m">AC</span> = 24, <span class="m">AB</span> = 25. ${cos}<span class="m"> A</span> мәнін табыңыз.`,
+     fig: triangle(7,24,25),
+     o:[F(24,25),F(7,25),F(7,24),F(24,7)]},
+    {type:"mc", q:`Өрнекті ықшамдаңыз: (${sin}${a} + ${cos}${a})<sup>2</sup> − 2${sin}${a}${cos}${a}`,
+     o:["1","0","−1","2"]},
+    {type:"num", q:`${sin}${a} = 0,8 және ${a} — сүйір бұрыш. ${cos}${a} мәнін табыңыз.`,
+     ans:0.6, hint:"Жауапты ондық бөлшек түрінде жазыңыз (мысалы: 0,5)."},
+    {type:"num", q:`${tg}${a} = 3 екені белгілі. ${F(1,`${cos}<sup>2</sup>${a}`)} өрнегінің мәнін табыңыз.`,
+     ans:10, hint:"Жауапты сан түрінде жазыңыз."}
+  ]
+};
+
+/* ================== СОСТОЯНИЕ ================== */
+const st = {fio:"", cls:"", v:"", qs:[], i:0, answers:[], leaves:0, running:false, t:0, timerId:null, started:0};
+const $ = id => document.getElementById(id);
+const LET = ["A","B","C","D"];
+
+function shuffle(arr){ const r=arr.slice(); for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];} return r; }
+
+/* ---------- старт ---------- */
+function checkStart(){
+  const fio = $("fio").value.trim();
+  const v = document.querySelector('input[name=var]:checked');
+  $("go").disabled = !(fio.length >= 3 && $("cls").value && v);
+}
+["input","change"].forEach(e=>{ $("fio").addEventListener(e,checkStart); $("cls").addEventListener(e,checkStart); });
+document.querySelectorAll('input[name=var]').forEach(r=>r.addEventListener("change",checkStart));
+
+$("go").addEventListener("click", ()=>{
+  st.fio = $("fio").value.trim().replace(/\s+/g," ");
+  st.cls = $("cls").value;
+  st.v = document.querySelector('input[name=var]:checked').value;
+  st.qs = QUESTIONS[st.v].map(q => q.type==="mc"
+      ? {...q, shown: shuffle(q.o.map((t,k)=>({t, ok:k===0})))}
+      : {...q});
+  st.answers = new Array(st.qs.length).fill(null);
+  st.i = 0; st.leaves = 0; st.running = true; st.started = Date.now();
+  $("start").classList.add("hidden");
+  $("test").classList.remove("hidden");
+  $("who").textContent = `${st.fio} · ${st.cls} · ${st.v}-нұсқа`;
+  history.pushState(null,"",location.href);
+  showQ();
+});
+
+/* ---------- показ вопроса ---------- */
+function showQ(){
+  const q = st.qs[st.i];
+  $("qnum").textContent = `${st.i+1}-тапсырма / ${st.qs.length}`;
+  $("qtext").innerHTML = q.q;
+  $("bar").style.width = (st.i/st.qs.length*100)+"%";
+  if(q.fig){ $("qfig").innerHTML = q.fig; $("qfig").classList.remove("hidden"); }
+  else { $("qfig").innerHTML=""; $("qfig").classList.add("hidden"); }
+
+  const body = $("qbody"); body.innerHTML = "";
+  if(q.type==="mc"){
+    $("qhint").textContent = "Бір дұрыс жауапты таңдаңыз.";
+    const box = document.createElement("div"); box.className="opts";
+    q.shown.forEach((o,k)=>{
+      const d=document.createElement("div"); d.className="opt";
+      d.innerHTML=`<span class="let">${LET[k]}</span><span>${o.t}</span>`;
+      d.addEventListener("click",()=>{
+        box.querySelectorAll(".opt").forEach(x=>x.classList.remove("sel"));
+        d.classList.add("sel"); st.answers[st.i]=k;
+      });
+      box.appendChild(d);
+    });
+    body.appendChild(box);
+  } else {
+    $("qhint").textContent = q.hint || "";
+    const inp=document.createElement("input");
+    inp.type="text"; inp.inputMode="decimal"; inp.className="num-in"; inp.placeholder="Жауабы";
+    inp.autocomplete="off";
+    inp.addEventListener("input",()=>{ st.answers[st.i]=inp.value.trim(); });
+    inp.addEventListener("keydown",e=>{ if(e.key==="Enter") nextQ(); });
+    body.appendChild(inp); setTimeout(()=>inp.focus(),50);
+  }
+  $("next").textContent = st.i===st.qs.length-1 ? "Аяқтау" : "Келесі";
+  startTimer();
+}
+
+/* ---------- таймер ---------- */
+function startTimer(){
+  clearInterval(st.timerId);
+  st.t = TIME_PER_Q; drawTimer();
+  st.timerId = setInterval(()=>{
+    st.t--; drawTimer();
+    if(st.t<=0){ clearInterval(st.timerId); nextQ(); }
+  },1000);
+}
+function drawTimer(){
+  const m=Math.floor(st.t/60), s=st.t%60;
+  $("timer").textContent=`${m}:${String(s).padStart(2,"0")}`;
+  $("timer").classList.toggle("low", st.t<=20);
+}
+
+/* ---------- переход ---------- */
+$("next").addEventListener("click", nextQ);
+function nextQ(){
+  if(!st.running) return;
+  if(st.i < st.qs.length-1){ st.i++; showQ(); }
+  else finish();
+}
+
+/* ---------- проверка ---------- */
+function parseNum(s){
+  if(s==null) return NaN;
+  s=String(s).replace(/\s/g,"").replace(",",".").replace("−","-");
+  if(!/^-?\d+(\.\d+)?$/.test(s)) return NaN;
+  return parseFloat(s);
+}
+function isRight(q,ans){
+  if(ans===null || ans==="") return false;
+  if(q.type==="mc") return q.shown[ans].ok;
+  const x=parseNum(ans); return !isNaN(x) && Math.abs(x-q.ans)<1e-9;
+}
+
+/* ---------- завершение ---------- */
+function finish(){
+  st.running=false; clearInterval(st.timerId);
+  $("bar").style.width="100%";
+  const marks = st.qs.map((q,k)=>isRight(q,st.answers[k]));
+  const raw = marks.filter(Boolean).length;
+  const pen = Math.min(raw, st.leaves*PENALTY_PER_LEAVE);
+  const fin = raw - pen;
+  const secs = Math.round((Date.now()-st.started)/1000);
+
+  $("test").classList.add("hidden"); $("result").classList.remove("hidden");
+  $("rwho").textContent = `${st.fio} · ${st.cls} · ${st.v}-нұсқа`;
+  $("rscore").textContent = `${fin} / 10`;
+  $("rraw").textContent = `${raw} / 10`;
+  $("rleave").textContent = st.leaves;
+  $("rpen").textContent = pen ? `−${pen}` : "0";
+  $("rfin").textContent = `${fin} / 10`;
+
+  const detail = marks.map((m,k)=>`${k+1}${m?"+":"−"}`).join(" ");
+  const payload = {
+    fio: st.fio, cls: st.cls, variant: st.v, topic: TOPIC,
+    raw, penalty: pen, score: fin, max: 10,
+    leaves: st.leaves, detail,
+    duration: `${Math.floor(secs/60)} мин ${secs%60} с`
+  };
+  send(payload);
+}
+
+function send(p){
+  if(!SCRIPT_URL || SCRIPT_URL.indexOf("PASTE_")===0){
+    $("rstatus").className="status err";
+    $("rstatus").textContent="Нәтиже жіберілмеді: тестте Google кесте мекенжайы көрсетілмеген. Мұғалімге хабарлаңыз.";
+    return;
+  }
+  fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)})
+    .then(()=>{ $("rstatus").className="status ok"; $("rstatus").textContent="Нәтиже мұғалімге сәтті жіберілді. Бетті жабуға болады."; })
+    .catch(()=>{ $("rstatus").className="status err"; $("rstatus").textContent="Нәтиже жіберілмеді (интернет байланысын тексеріңіз). Бетті жаппай, мұғалімге хабарлаңыз."; });
+}
+
+/* ---------- контроль вкладки ---------- */
+document.addEventListener("visibilitychange", ()=>{
+  if(!st.running) return;
+  if(document.visibilityState==="hidden"){
+    st.leaves++;
+  } else {
+    $("wcount").textContent = st.leaves;
+    $("warn").classList.remove("hidden");
+  }
+});
+$("wok").addEventListener("click", ()=>$("warn").classList.add("hidden"));
+
+/* защита от случайного закрытия/возврата */
+window.addEventListener("beforeunload", e=>{ if(st.running){ e.preventDefault(); e.returnValue=""; } });
+window.addEventListener("popstate", ()=>{ if(st.running) history.pushState(null,"",location.href); });
+document.addEventListener("contextmenu", e=>{ if(st.running) e.preventDefault(); });
+document.addEventListener("copy", e=>{ if(st.running) e.preventDefault(); });
+</script>
+</body>
+</html>
